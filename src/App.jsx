@@ -3,6 +3,11 @@ import { useState } from 'react';
 const initialData = {
   id: '',
   title: '',
+  image: '',
+  content: '',
+  category: '',
+  tags: [],
+  published: false,
 };
 
 const App = () => {
@@ -41,12 +46,32 @@ const App = () => {
     setPostList(postList.filter((post) => post.id !== postId));
   };
 
+  function handleTagsChange(e) {
+    // recupero il valore del checkbox
+    const value = e.target.value;
+
+    // recupero lo stato della checkbox
+    // const checked = e.target.checked;
+
+    let tags = [...formValues.tags];
+
+    tags.push(value);
+
+    setFormValues((data) => {
+      return {
+        ...data,
+        tags,
+      };
+    });
+  }
+
   return (
     <>
       <h1 className="py-8 text-center font-mono text-3xl font-bold">
         Post Create
       </h1>
       <form onSubmit={createPost} className="mx-auto flex max-w-xl flex-col">
+        {/* Titolo  */}
         <label htmlFor="title" className="font-semibold">
           Titolo del post
         </label>
@@ -57,6 +82,89 @@ const App = () => {
           name="title"
           className="mb-2 w-full rounded-md border-2 p-2 text-black"
         />
+        {/* Immagine  */}
+        <label htmlFor="image" className="font-semibold">
+          Immagine del post
+        </label>
+        <input
+          value={formValues.image}
+          onChange={(e) => handleChange(e, formValues, setFormValues, 'image')}
+          type="text"
+          name="image"
+          className="mb-2 w-full rounded-md border-2 p-2 text-black"
+        />
+        {/* Content  */}
+        <label htmlFor="content" className="font-semibold">
+          Contenuto del post
+        </label>
+        <textarea
+          name="content"
+          value={formValues.content}
+          onChange={(e) =>
+            handleChange(e, formValues, setFormValues, 'content')
+          }
+          cols="30"
+          rows="5"
+          className="mb-3 w-full rounded-md border-2 p-2 text-black"
+        ></textarea>
+        {/* Categoria  */}
+        <select
+          value={formValues.category}
+          onChange={(e) =>
+            handleChange(e, formValues, setFormValues, 'category')
+          }
+          className="mb-2 w-full rounded-md border-2 p-1 text-black"
+        >
+          <option value="">Seleziona una categoria</option>
+          <option value="1">Opzione 1</option>
+          <option value="2">Opzione 2</option>
+          <option value="3">Opzione 3</option>
+          <option value="4">Opzione 4</option>
+        </select>
+
+        {/* Tags  */}
+        <div className="flex gap-4">
+          <label className="">
+            <input
+              type="checkbox"
+              checked={formValues.tags.includes('1')}
+              value="1"
+              onChange={handleTagsChange}
+              className="mr-1"
+            />
+            Tag 1
+          </label>
+          <label className="">
+            <input
+              type="checkbox"
+              checked={formValues.tags.includes('2')}
+              value="2"
+              onChange={handleTagsChange}
+              className="mr-1"
+            />
+            Tag 2
+          </label>
+          <label className="">
+            <input
+              type="checkbox"
+              checked={formValues.tags.includes('3')}
+              value="3"
+              onChange={handleTagsChange}
+              className="mr-1"
+            />
+            Tag 3
+          </label>
+          <label className="">
+            <input
+              type="checkbox"
+              checked={formValues.tags.includes('4')}
+              value="4"
+              onChange={handleTagsChange}
+              className="mr-1"
+            />
+            Tag 4
+          </label>
+        </div>
 
         <button
           type="submit"
