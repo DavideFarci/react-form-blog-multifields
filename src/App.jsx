@@ -24,7 +24,14 @@ const App = () => {
 
   const createPost = (e) => {
     e.preventDefault();
-    setPostList([...postList, { ...formValues, id: crypto.randomUUID() }]);
+    setPostList([
+      ...postList,
+      {
+        ...formValues,
+        id: crypto.randomUUID(),
+        published: formValues.published === 'true',
+      },
+    ]);
     setFormValues(initialData);
   };
 
@@ -107,6 +114,7 @@ const App = () => {
           rows="5"
           className="mb-3 w-full rounded-md border-2 p-2 text-black"
         ></textarea>
+
         {/* Categoria  */}
         <select
           value={formValues.category}
@@ -127,7 +135,6 @@ const App = () => {
           <label className="">
             <input
               type="checkbox"
-              checked={formValues.tags.includes('1')}
               value="1"
               onChange={handleTagsChange}
               className="mr-1"
@@ -137,7 +144,6 @@ const App = () => {
           <label className="">
             <input
               type="checkbox"
-              checked={formValues.tags.includes('2')}
               value="2"
               onChange={handleTagsChange}
               className="mr-1"
@@ -147,7 +153,6 @@ const App = () => {
           <label className="">
             <input
               type="checkbox"
-              checked={formValues.tags.includes('3')}
               value="3"
               onChange={handleTagsChange}
               className="mr-1"
@@ -157,14 +162,29 @@ const App = () => {
           <label className="">
             <input
               type="checkbox"
-              checked={formValues.tags.includes('4')}
               value="4"
               onChange={handleTagsChange}
-              className="mr-1"
+              className="mb-3 mr-1"
             />
             Tag 4
           </label>
         </div>
+
+        {/* Published  */}
+        <label htmlFor="published" className="font-semibold">
+          Vuoi rendere il post pubblico?
+        </label>
+        <select
+          name="published"
+          value={formValues.published}
+          onChange={(e) =>
+            handleChange(e, formValues, setFormValues, 'published')
+          }
+          className="mb-2 w-full rounded-md border-2 p-1 text-black"
+        >
+          <option value="true">Si</option>
+          <option value="false">No</option>
+        </select>
 
         <button
           type="submit"
@@ -189,6 +209,106 @@ const App = () => {
           name="title"
           className="mb-2 w-full rounded-md border-2 p-2 text-black"
         />
+        {/* Immagine  */}
+        <label htmlFor="image" className="font-semibold">
+          Immagine del post
+        </label>
+        <input
+          value={editValues.image}
+          onChange={(e) => handleChange(e, editValues, setEditValues, 'image')}
+          type="text"
+          name="image"
+          className="mb-2 w-full rounded-md border-2 p-2 text-black"
+        />
+        {/* Content  */}
+        <label htmlFor="content" className="font-semibold">
+          Contenuto del post
+        </label>
+        <textarea
+          name="content"
+          value={editValues.content}
+          onChange={(e) =>
+            handleChange(e, editValues, setEditValues, 'content')
+          }
+          cols="30"
+          rows="5"
+          className="mb-3 w-full rounded-md border-2 p-2 text-black"
+        ></textarea>
+
+        {/* Categoria  */}
+        <select
+          value={editValues.category}
+          onChange={(e) =>
+            handleChange(e, editValues, setEditValues, 'category')
+          }
+          className="mb-2 w-full rounded-md border-2 p-1 text-black"
+        >
+          <option value="">Seleziona una categoria</option>
+          <option value="1">Opzione 1</option>
+          <option value="2">Opzione 2</option>
+          <option value="3">Opzione 3</option>
+          <option value="4">Opzione 4</option>
+        </select>
+
+        {/* Tags  */}
+        <div className="flex gap-4">
+          <label className="">
+            <input
+              type="checkbox"
+              checked={editValues.tags.includes('1')}
+              value="1"
+              onChange={handleTagsChange}
+              className="mr-1"
+            />
+            Tag 1
+          </label>
+          <label className="">
+            <input
+              type="checkbox"
+              checked={editValues.tags.includes('2')}
+              value="2"
+              onChange={handleTagsChange}
+              className="mr-1"
+            />
+            Tag 2
+          </label>
+          <label className="">
+            <input
+              type="checkbox"
+              checked={editValues.tags.includes('3')}
+              value="3"
+              onChange={handleTagsChange}
+              className="mr-1"
+            />
+            Tag 3
+          </label>
+          <label className="">
+            <input
+              type="checkbox"
+              checked={editValues.tags.includes('4')}
+              value="4"
+              onChange={handleTagsChange}
+              className="mb-3 mr-1"
+            />
+            Tag 4
+          </label>
+        </div>
+
+        {/* Published  */}
+        <label htmlFor="published" className="font-semibold">
+          Vuoi rendere il post pubblico?
+        </label>
+        <select
+          name="published"
+          value={editValues.published}
+          onChange={(e) =>
+            handleChange(e, editValues, setEditValues, 'published')
+          }
+          className="mb-2 w-full rounded-md border-2 p-1 text-black"
+        >
+          <option value="true">Si</option>
+          <option value="false">No</option>
+        </select>
 
         <button
           type="submit"
@@ -197,11 +317,14 @@ const App = () => {
           Modifica
         </button>
       </form>
-      <ul className="max-w-2xl">
+      <ul className="max-w-7xl">
         {postList.map((post, i) => (
           <li className="mb-3 flex justify-between pl-4 pr-40" key={post.id}>
             <span>
-              <span className="mr-4 font-bold">{i + 1}.</span> {post.title}
+              <span className="mr-4 font-bold">{i + 1}.</span>Title:{' '}
+              {post.title}, Image:{post.image}, Content: {post.content},
+              Category: {post.category}, Tags: {post.tags}, Published:
+              {post.published}
             </span>
             <div>
               <span
